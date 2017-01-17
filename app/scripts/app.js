@@ -11,6 +11,7 @@
         $stateProvider
         .state('landing', {         /* create a state named landing and add an accompanying URL */
             url: '/',
+            controller: 'LandingCtrl as landing',   /* add controller property to the landing state */
             templateUrl: '/templates/landing.html'
         })
         .state('album', {
@@ -19,6 +20,7 @@
         })
         .state('collection', {
             url: '/collection',
+            controller: 'CollectionCtrl as collection', /* register the CollectionCtrl to the collection state */
             templateUrl: '/templates/collection.html'
         });
     }
