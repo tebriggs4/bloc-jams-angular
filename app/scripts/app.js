@@ -9,9 +9,9 @@
         /* $stateProvider calls .state(), which takes two arguments: stateName and stateConfig, stateName is a unique */
         /* string that identifies a state, stateConfig is an object that defines specific properties of the state */
         $stateProvider
-        .state('landing', {         /* create a state named landing and add an accompanying URL */
+        .state('landing', {                             /* create a state named landing and add an accompanying URL */
             url: '/',
-            controller: 'LandingCtrl as landing',   /* add controller property to the landing state */
+            controller: 'LandingCtrl as landing',       /* add controller property to the landing state */
             templateUrl: '/templates/landing.html'
         })
         .state('album', {

@@ -19,7 +19,7 @@
                 { title: 'Pink', duration: 153.14, audioUrl: '/assets/music/pink' },
                 { title: 'Magenta', duration: 374.22, audioUrl: '/assets/music/magenta' }
             ]
- };
+        };
  
         /* Another Example Album */
         var albumMarconi = {
@@ -35,9 +35,17 @@
                 { title: 'Can you hear me now?', duration: '3:14' },
                 { title: 'Wrong phone number', duration: '2:15' }
             ]
-};
-        Fixtures.getAlbum = function() {    /* add a public getAlbum method to the service */
+        };
+        Fixtures.getAlbum = function() {                        /* add a public getAlbum method to the service */
             return albumPicasso;
+        };
+        
+        Fixtures.getCollection = function(numberOfAlbums) {     /* add a public getCollection method to the service */
+            var albums = [];
+            for (var i=0; i < numberOfAlbums; i++) {    /* bind the data from the albumPicasso object to the Collection template */
+                albums.push(Fixtures.getAlbum());       /* angular.copy is a global function components on the angular object */
+            }
+            return albums;
         };
         
         return Fixtures;                /* factory will return this object and make its properties and methods available */
