@@ -1,6 +1,6 @@
 (function() {
-    function SongPlayer() {     /* SongPlayer service contains 2 private attributes: currentSong & currentBuzzObject; */
-                                /* private function: setSong; 2 public methods: SongPlayer.play & SongPlayer.pause  */
+    function SongPlayer() {     /* SongPlayer service contains 2 private attributes: currentSong & currentBuzzObject; 2 private */
+                                /* functions: setSong & playSong; 2 public methods: SongPlayer.play & SongPlayer.pause  */
         var SongPlayer = {};    /* we create a variable and set it to an empty object. The service returns */
                                 /* this object, making its properties and methods public to the rest of the application */
         var currentSong = null;
@@ -30,15 +30,24 @@
         currentSong = song;
         };
         
-        SongPlayer.play = function(song) {  /* add a play method to the SongPlayer service so that we can play a song */
+        /**
+        * @function playSong
+        * @desc Plays current song
+        * @param {Object} song
+        */
+        var playSong = function(song) {
+            currentBuzzObject.play();                               /* play the new Buzz sound object */
+            song.playing = true;                                    /* boolean variable, if song is playing */
+        };
+        
+        /* add a play method to the SongPlayer service so that we can play a song */
+        SongPlayer.play = function(song) {
             if (currentSong !== song) {
                 setSong(song);                                      /* set the newly chosen song object as the currentSong */
-                currentBuzzObject.play();                           /* play the new Buzz sound object */
-                song.playing = true;                                /* boolean variable, if song is playing */
+                playSong(song);
             } else if (currentSong === song) {
                 if (currentBuzzObject.isPaused()) {
-                    currentBuzzObject.play();                       /* play song if it had previously been paused */
-                    song.playing = true;                            /* boolean variable, if song is playing */
+                    playSong(song);
                 }
             }
         };
