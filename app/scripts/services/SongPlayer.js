@@ -36,6 +36,7 @@
             currentBuzzObject.bind('timeupdate', function() {
                 $rootScope.$apply(function() {
                     SongPlayer.currentTime = currentBuzzObject.getTime();
+                    SongPlayer.currentVolume = currentBuzzObject.getVolume();
                 });
             });
  
@@ -79,6 +80,11 @@
         * @type {Number}
         */
         SongPlayer.currentTime = null;
+        /**
+        * @desc Current volume of currently playing song
+        * @type {Number}
+        */
+        SongPlayer.currentVolume = null;
         /**
         * @function play
         * @desc Play current or new song
@@ -153,6 +159,18 @@
         SongPlayer.setCurrentTime = function(time) {
             if (currentBuzzObject) {
                 currentBuzzObject.setTime(time);
+            }
+        };
+        /**
+        * @function setVolume
+        * @desc Set volume of currently playing song
+        * @param {Number} time
+        */
+        /* The setVolume method checks if there is a current Buzz object, and, if so, uses the Buzz library's */
+        /* setTime method to set the playback position in seconds. */
+        SongPlayer.setCurrentVolume = function(volume) {
+            if (currentBuzzObject) {
+                currentBuzzObject.setVolume(volume);
             }
         };
         

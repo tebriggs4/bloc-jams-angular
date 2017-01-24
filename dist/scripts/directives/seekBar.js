@@ -96,7 +96,7 @@
                     });
                 };
                 
-                /* We name the function notifyOnChange because its purpose is to notify onChange that  scope.value has changed. */
+                /* We name the function notifyOnChange because its purpose is to notify onChange that scope.value has changed. */
                 var notifyOnChange = function(newValue) {
                     if (typeof scope.onChange === 'function') {
                         scope.onChange({value: newValue});
