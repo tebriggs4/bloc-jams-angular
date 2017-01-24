@@ -15,18 +15,25 @@
         return {
             templateUrl: '/templates/directives/seek_bar.html',  /* specifies a URL from which the directive will load a template */
                             /* The templateUrl option specifies the path to the HTML template that the directive will use. */
+            
             replace: true,  /* Specifies what the template should replace. If true, the template replaces the directive's */
                             /* If false, the template replaces the contents of the directive's element. */
                             /* replace: true instructs Angular to completely replace the <seek-bar> element with the directive's */
                             /* HTML template rather than insert the HTML between the <seek-bar></seek-bar> tags. */
+            
             restrict: 'E',  /* Restricts the directive to a specific declaration style: element E, attribute A, class C, and */
                             /* comment M. If omitted, the defaults (E and A) are used. */
                             /* restrict: 'E' instructs Angular to treat this directive as an element. For example, Angular will run */
                             /* the code if it finds <seek-bar> in the HTML, but not if it finds <div seek-bar>. */
-            scope: { },     /* specifies that a new scope be created for the directive */
-                            /* Declaring an empty scope property ensures that a new scope will exist solely for the directive */
-                            /* (referred to as isolate-scope). An isolate-scope allows us to bind functions from the directive's */
-                            /* view to its scope. */
+                            /* The & in the isolate scope object is a type of directive scope binding. The three types of directive */
+                            /* scope bindings – @, =, and & – allow us to treat the value of the given attribute differently. */
+                            /* The & binding type provides a way to execute an expression in the context of the parent scope. */
+            
+            scope: {        /* specifies that a new scope be created for the directive, Declaring an empty scope property ensures */       
+                onChange: '&' /* that a new scope will exist solely for the directive (referred to as isolate-scope). An isolate-scope */ 
+            },              /* allows us to bind functions from the directive's view to its scope. Scoping the attribute allows us the /
+                            /* flexibility to specify how we want to handle the value passed to the on-change attribute: */
+            
             link: function(scope, element, attributes) {    /* Responsible for registering DOM listeners and updating the DOM. */
                             /* This is where we put most of the directive logic. The link function is automatically generated and */
                             /* scoped to the element defining the directive. Think of it as a function that executes when the directive */
@@ -38,6 +45,16 @@
                 
                 var seekBar = $(element);   /* Holds the element that matches the directive (<seek-bar>) as a jQuery object */
                                             /* so we can call jQuery methods on it. */
+                
+                attributes.$observe('value', function(newValue) {   /* We can notify the directive of all changes to attribute values */
+                                                                    /* by using the $observe method on the Angular attributes object */
+                    scope.value = newValue;
+                });
+ 
+                attributes.$observe('max', function(newValue) {     /* We can notify the directive of all changes to attribute values */
+                                                                    /* by using the $observe method on the Angular attributes object */   
+                    scope.max = newValue;
+                });
  
                 var percentString = function () {   /* A function that calculates a percent based on the value and maximum value */
                                                     /* of a seek bar. */
@@ -59,6 +76,7 @@
                                                             /* the location of the user's click on the seek bar. */
                     var percent = calculatePercent(seekBar, event);
                     scope.value = percent * scope.max;
+                    notifyOnChange(scope.value);            /* send the updated scope.value to the function evaluated by onChange */
                 };
                 
                 scope.trackThumb = function() {     /* Similar to scope.onClickSeekBar, but uses $apply to constantly apply */
@@ -68,6 +86,7 @@
                         var percent = calculatePercent(seekBar, event);
                         scope.$apply(function() {
                             scope.value = percent * scope.max;
+                            notifyOnChange(scope.value);        /* send the updated scope.value to the function evaluated by onChange */
                         });
                     });
  
@@ -75,6 +94,13 @@
                         $document.unbind('mousemove.thumb');
                         $document.unbind('mouseup.thumb');
                     });
+                };
+                
+                /* We name the function notifyOnChange because its purpose is to notify onChange that  scope.value has changed. */
+                var notifyOnChange = function(newValue) {
+                    if (typeof scope.onChange === 'function') {
+                        scope.onChange({value: newValue});
+                    }
                 };
             }
         };
